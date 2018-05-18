@@ -1,20 +1,22 @@
-#work1
-puts "Programm ideal weight"
+#Идеальный вес. Программа запрашивает у пользователя имя и рост 
+#и выводит идеальный вес по формуле <рост> - 110, после чего выводит 
+#результат пользователю на экран с обращением по имени. Если идеальный 
+#вес получается отрицательным, то выводится строка "Ваш вес уже оптимальный"
 
-print "whats you name?"
+puts "Идеальный вес."
+
+print "Как Вас зовут?"
 first_name = gets.chomp
 
-print "whats your growth?"
+print "Какой Ваш рост #{first_name}?"
 user_growth = gets.to_i
 
-result = growth - 110
-puts "Ideal weight #{first_name}: #{result}."
+ideal_weight = growth - 110
 
-puts "Tell me plz" 
-puts "Type your are weight?"
-user_weight = gets.to_i
-
-if result != user_weight
-	print "Vash ves optimalny"
+if ideal_weight > 0
+	puts "#{first_name} Ваш идеальный является: #{ideal_weight}."
+else
+	puts "Ваш вес оптимальный"
 end
+
 
