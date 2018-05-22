@@ -23,13 +23,7 @@ c = gets.to_f
 d = b**2 - 4 * a * c
 
 if d > 0
-  puts "Дискриминант положительный"
   d_sqrt = Math.sqrt(d)
-else
-  puts "Дискриминант отрицательный"
-end
-
-if d > 0
   puts "Условия: Если D > 0, то выводим дискриминант и 2 корня"
   puts "#{d}"
 	puts "x1 = #{(-b + d_sqrt) / (2 * a)} and x2 =  #{(-b - d_sqrt) / (2 * a)}"

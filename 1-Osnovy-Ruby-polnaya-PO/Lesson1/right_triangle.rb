@@ -14,14 +14,19 @@ b = gets.to_f
 c = gets.to_f
 
 all = [a, b, c].sort
+
 true_tre = all[0]**2 + all[1]**2 == all[2]**2
 
-if true_tre == true
+same_parties = a == b && b == c
+
+isosceles_triangle = a == b || b == c
+
+if true_tre
   puts "Набранный параметр прямоугольный треугольник"
+elsif same_parties
+  puts "треугольник равносторонний"
+elsif isosceles_triangle
+  puts "у треугольника одинаковые стороны"
 else
   puts "Параметр не является прямоугольным треугольником"
-elsif true_tre == true && a == b || b == c
-  puts "у треугольника одинаковые стороны"
-elsif a == b && b == c
-  puts "равнобедренный треугольник"
 end
