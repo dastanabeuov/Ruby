@@ -17,16 +17,16 @@ all = [a, b, c].sort
 
 true_tre = all[0]**2 + all[1]**2 == all[2]**2
 
-same_parties = a == b && b == c
+same_parties = all[0] == all[1]
 
-isosceles_triangle = a == b || b == c
+isosceles_triangle = all[0] == all[1] && all[1] == all[2]
 
 if true_tre
   puts "Набранный параметр прямоугольный треугольник"
-elsif same_parties
-  puts "треугольник равносторонний"
+elsif true_tre && same_parties
+  puts "Набранный параметр прямоугольный треугольник еще треугольник равнобедренный"
 elsif isosceles_triangle
-  puts "у треугольника одинаковые стороны"
+  puts "Треугольник равносторонний"
 else
   puts "Параметр не является прямоугольным треугольником"
 end
