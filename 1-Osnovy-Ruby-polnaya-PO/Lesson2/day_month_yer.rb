@@ -3,21 +3,18 @@
 #начиная отсчет с начала года. Учесть, что год может быть високосным. 
 #(Запрещено использовать встроенные в ruby методы для этого вроде Date#yday или Date#leap?) 
 #Алгоритм опредления високосного года: www.adm.yar.ru
+
 puts "Напишите три числа которые обозначают число, месяц, год"
 puts "Напишите число дня:"
-d = gets.to_i
+day = gets.to_i
 puts "Напишите какой месяц:"
-m = gets.to_i
+month = gets.to_i
 puts "Напишите какой год:"
-y = gets.to_i
+yer = gets.to_i
 
-if y % 400 == 0 || y % 4 == 0 && y % 100 != 0
-  feb = 29
-else
-  feb = 28
-end
+feb = yer % 400 == 0 || yer % 4 == 0 && yer % 100 != 0 ? 29 : 28
 
 months = [31, feb, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-month = months.first(m -1)
-date_number_on_month = month.inject(d){ |d, month| d + month }
-puts "Порядковый номер даты #{date_number_on_month}"
+result = months.first(month - 1)
+date_month = result.inject(day) { |month, days| month + days }
+puts "Порядковый номер даты #{date_month}"
