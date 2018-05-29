@@ -7,9 +7,10 @@
 #Также вывести итоговую сумму за каждый товар. Вычислить и вывести на экран итоговую сумму всех покупок в "корзине".
 product = {}
 
-while name_product == "stop" do
+loop do
   puts "Вводите название товара"
   name_product = gets.chomp 
+  break if name_product == "stop"
   puts "Вводите цену за единицу товара"
   price_product = gets.to_f
   puts "Вводите количество купленного товара"

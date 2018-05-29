@@ -16,5 +16,5 @@ feb = yer % 400 == 0 || yer % 4 == 0 && yer % 100 != 0 ? 29 : 28
 
 months = [31, feb, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 result = months.first(month - 1)
-date_month = result.inject(day) { |month, days| month + days }
+date_month = result.inject(day) { |follow_month, days| follow_month + days }
 puts "Порядковый номер даты #{date_month}"
