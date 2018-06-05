@@ -1,5 +1,5 @@
 class Station
-  attr_accessor :name, :train
+  attr_reader :name, :trains
 
   def initialaize(name)
     @name = name
@@ -10,29 +10,35 @@ class Station
     @trains << train
   end
 
-  def all_trains_in_station
-    @trains
-  end
-
-  def get_type_train(type)
-    @trains.count { |train| train == train.type }
+  def get_train(type)
+    trains.each do |poezd| if poezd == type
+      puts type
+    else
+      puts "Net v base dannyh!"
+    end
   end
 
   def send_train(train)
-    if @trains.include?(train)
+    if trains.include?(train)
       @trains.delete(train)
     else
       puts "Нет в базе данных!"
+    end
   end
-end
 
 class Route
-  attr_accessor :stations
+  attr_reader :stations
 
   def initialaize(start_station, stop_station)
-    @start_station = start_station
-    @stop_station = stop_station
     @stations = [start_station, stop_station]
+  end
+
+  def start_station
+    stations = [0]
+  end
+
+  def stop_station
+    stations = [-1]
   end
 
   def add_station(station)
@@ -40,55 +46,62 @@ class Route
   end
 
   def delete_station(station)
-    if station != @stations[0,-1]
-      @stations.delete(station)
-    else
+    if [start_station, stop_station].include?(station)
       puts "Нелзя из базы удалять начальную и конечную станцию!"
+    else
+      @stations.delete(station)
+    end
   end
 
-  def print_stations
-    @stations
+  def print_station
+    stations.each { |element| puts element }
   end
-end
 
 class Train
-  attr_accessor :number , :type, :count, :speed
+  attr_reader :number , :type, :wagons, :speed
 
-  def initialaize(number, type, count)
+  def initialaize(number, type, wagons)
     @number = number
     @type = type
-    @count = count
+    @wagons = wagons
   end
 
   def start
-    @speed += (1..10).step(2).sleep(2)
-  end
-
-  def current_speed
-    @speed
+    @speed += 1
   end
 
   def stop
-    @speed = (10..0).step(2).sleep(2) 
+    @speed -= 1 
   end
 
-  def count_train
-    @count
+  def current_speed
+    speed
   end
 
-  def add_count_train
-    if @speed == 0
-      @count += 1
+  def number_of_wagons
+    wagons.count
+  end
+
+  def add_wagon
+    if stop
+      @wagons + 1
     else
-      puts "Не может прицеплять"
+      puts "Ne mozhet pricepit tak kak poezd dvijetsa"
     end
   end
 
-  def delete_count_train
-    if @speed == 0 && @count > 0
-      @count.delete(1)
+  def remove_wagon
+    if stop && wagons > 0
+      @wagons - 1
     else
-      puts "Не может отцеплять"
+      puts "Ne vizmozhno otceplyat vagon tak kak poezd dvijetsa"
     end
+  end
+
+##########################################################################
+  def in_route(route)
+    @route = route
+    @rout_index = 0
+    add_station(@rout_index)
   end
 end
