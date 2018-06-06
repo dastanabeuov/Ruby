@@ -11,11 +11,7 @@ class Station
   end
 
   def get_train(type)
-    trains.each do |poezd| if poezd == type
-      puts type
-    else
-      puts "Net v base dannyh!"
-    end
+    trains.select(type)
   end
 
   def send_train(train)
@@ -34,11 +30,11 @@ class Route
   end
 
   def start_station
-    stations = [0]
+    @stations[0]
   end
 
   def stop_station
-    stations = [-1]
+    @stations[-1]
   end
 
   def add_station(station)
@@ -46,7 +42,7 @@ class Route
   end
 
   def delete_station(station)
-    if [start_station, stop_station].include?(station)
+    if stations[0, -1].include?(station)
       puts "Нелзя из базы удалять начальную и конечную станцию!"
     else
       @stations.delete(station)
@@ -54,13 +50,13 @@ class Route
   end
 
   def print_station
-    stations.each { |element| puts element }
+    stations.each { |station| puts station }
   end
 
 class Train
-  attr_reader :number , :type, :wagons, :speed
+  attr_reader :number, :type, :wagons, :speed
 
-  def initialaize(number, type, wagons)
+  def initialaize(number, type, wagons, speed)
     @number = number
     @type = type
     @wagons = wagons
@@ -70,29 +66,21 @@ class Train
     @speed += 1
   end
 
-  def stop
-    @speed -= 1 
-  end
-
-  def current_speed
-    speed
-  end
-
-  def number_of_wagons
-    wagons.count
+  def slow_down
+    @speed -= 1 if speed != 0 
   end
 
   def add_wagon
-    if stop
-      @wagons + 1
+    if slow_down == 0
+      @wagons += 1
     else
       puts "Ne mozhet pricepit tak kak poezd dvijetsa"
     end
   end
 
   def remove_wagon
-    if stop && wagons > 0
-      @wagons - 1
+    if slow_down == 0 && wagons > 0
+      @wagons -= 1
     else
       puts "Ne vizmozhno otceplyat vagon tak kak poezd dvijetsa"
     end
@@ -102,6 +90,6 @@ class Train
   def in_route(route)
     @route = route
     @rout_index = 0
-    add_station(@rout_index)
+    @add_station(@route)
   end
 end
