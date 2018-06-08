@@ -11,7 +11,7 @@ class Station
   end
 
   def get_train(type)
-    trains.select(type)
+    @trains.select { |train| train.type == type}
   end
 
   def send_train(train)
@@ -21,6 +21,7 @@ class Station
       puts "Нет в базе данных!"
     end
   end
+end
 
 class Route
   attr_reader :stations
@@ -42,7 +43,7 @@ class Route
   end
 
   def delete_station(station)
-    if stations[0, -1].include?(station)
+    if @stations[0, -1].include?(station)
       puts "Нелзя из базы удалять начальную и конечную станцию!"
     else
       @stations.delete(station)
@@ -52,6 +53,7 @@ class Route
   def print_station
     stations.each { |station| puts station }
   end
+end
 
 class Train
   attr_reader :number, :type, :wagons, :speed
@@ -60,9 +62,10 @@ class Train
     @number = number
     @type = type
     @wagons = wagons
+    @speed = 0
   end
 
-  def start
+  def speed_up
     @speed += 1
   end
 
@@ -71,11 +74,7 @@ class Train
   end
 
   def add_wagon
-    if slow_down == 0
-      @wagons += 1
-    else
-      puts "Ne mozhet pricepit tak kak poezd dvijetsa"
-    end
+      @wagons += 1 if self.speed == 0
   end
 
   def remove_wagon
@@ -89,7 +88,33 @@ class Train
 ##########################################################################
   def in_route(route)
     @route = route
-    @rout_index = 0
-    @add_station(@route)
+    start_station = @route.stations(route)
+    start_station.add_station(self)
+    @current_index = 0
   end
+
+  def next_station
+    @route.stations[@current_index + 1]
+  end
+
+  def current_station
+    @route.stations[@current_index]
+  end
+
+  def prev_station
+    @route.stations[@current_index - 1]
+  end
+
+  def forward
+    current_station.delete_train(self)
+    next_station.add_train(self)
+    @current_index += 1
+  end
+
+  def go_back
+    current_station.delete_train(self)
+    next_station.add_train(self)
+    @current_index -= 1
+  end
+
 end
