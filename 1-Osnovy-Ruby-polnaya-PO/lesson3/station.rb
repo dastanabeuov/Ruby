@@ -6,15 +6,15 @@ class Station
     @trains = []
   end
 
-  def set_train(train)
+  def train=(train)
     @trains << train
   end
 
-  def get_train(type)
+  def train(type)
     @trains.select { |train| train.type == type}
   end
 
-  def send_train(train)
+  def send_train=(train)
     if trains.include?(train)
       @trains.delete(train)
     else
@@ -38,12 +38,13 @@ class Route
     @stations[-1]
   end
 
-  def add_station(station)
+  def station=(station)
     @stations.insert(-2, station)
   end
 
-  def delete_station(station)
-    if @stations[0, -1].include?(station)
+  def delete_station=(station)
+    combo = [start_station, stop_station]
+    if combo.include?(station)
       puts "Нелзя из базы удалять начальную и конечную станцию!"
     else
       @stations.delete(station)
@@ -51,14 +52,14 @@ class Route
   end
 
   def print_station
-    stations.each { |station| puts station }
+    @stations.each { |station| puts station.name }
   end
 end
 
 class Train
   attr_reader :number, :type, :wagons, :speed
 
-  def initialaize(number, type, wagons, speed)
+  def initialaize(number, type, wagons)
     @number = number
     @type = type
     @wagons = wagons
@@ -74,27 +75,29 @@ class Train
   end
 
   def add_wagon
-      @wagons += 1 if self.speed == 0
+    @wagons += 1 if speed == 0
   end
 
   def remove_wagon
-    if slow_down == 0 && wagons > 0
+    if @speed == 0 && wagons > 0
       @wagons -= 1
     else
       puts "Ne vizmozhno otceplyat vagon tak kak poezd dvijetsa"
     end
   end
 
-##########################################################################
-  def in_route(route)
+  def route=(route)
     @route = route
-    start_station = @route.stations(route)
-    start_station.add_station(self)
+    start_station = route.stations(route)
+    start_station.station=(self)
     @current_index = 0
   end
 
   def next_station
-    @route.stations[@current_index + 1]
+    if @route.any?
+      @route.stations[@current_index + 1]
+    else
+      puts "Znachenya marshruta otsutstvuet"
   end
 
   def current_station
@@ -105,16 +108,15 @@ class Train
     @route.stations[@current_index - 1]
   end
 
-  def forward
-    current_station.delete_train(self)
-    next_station.add_train(self)
+  def go_forward
+    current_station.send_train=(self)
+    next_station.train=(self)
     @current_index += 1
   end
 
   def go_back
-    current_station.delete_train(self)
-    next_station.add_train(self)
+    current_station.send_train=(self)
+    next_station.train=(self)
     @current_index -= 1
   end
-
 end
