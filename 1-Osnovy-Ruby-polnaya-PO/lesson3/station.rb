@@ -6,15 +6,15 @@ class Station
     @trains = []
   end
 
-  def train=(train)
+  def set_train(train)
     @trains << train
   end
 
-  def train(type)
-    @trains.select { |train| train.type == type}
+  def get_trains_by_type(type)
+    @trains.select { |train| train.type == type }
   end
 
-  def send_train=(train)
+  def send_train(train)
     if trains.include?(train)
       @trains.delete(train)
     else
@@ -38,7 +38,7 @@ class Route
     @stations[-1]
   end
 
-  def station=(station)
+  def add_station(station)
     @stations.insert(-2, station)
   end
 
@@ -51,7 +51,7 @@ class Route
     end
   end
 
-  def print_station
+  def print_stations
     @stations.each { |station| puts station.name }
   end
 end
@@ -86,18 +86,19 @@ class Train
     end
   end
 
-  def route=(route)
+  def set_route(route)
     @route = route
-    start_station = route.stations(route)
-    start_station.station=(self)
+    start_station = @route.stations.first(route)
+    start_station.add_station(self)
     @current_index = 0
   end
 
   def next_station
-    if @route.any?
+    if route
       @route.stations[@current_index + 1]
     else
       puts "Znachenya marshruta otsutstvuet"
+    end
   end
 
   def current_station
@@ -105,18 +106,24 @@ class Train
   end
 
   def prev_station
+    if current_station != @route.stop_station
     @route.stations[@current_index - 1]
+  else
+    puts "eto pervaya stancy"
   end
 
   def go_forward
-    current_station.send_train=(self)
-    next_station.train=(self)
+    current_station.send_train(self)
+    next_station.set_train(self)
     @current_index += 1
   end
 
   def go_back
-    current_station.send_train=(self)
-    next_station.train=(self)
+    if prev_station
+    current_station.send_train(self)
     @current_index -= 1
+    current_station.set_train(self)
+  else
+    puts "Nevozmozhno nazat"
   end
 end
