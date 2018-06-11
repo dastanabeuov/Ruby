@@ -6,7 +6,7 @@ class Station
     @trains = []
   end
 
-  def set_train(train)
+  def handle_train_arrival(train)
     @trains << train
   end
 
@@ -71,7 +71,7 @@ class Train
   end
 
   def slow_down
-    @speed -= 1 if speed != 0 
+    @speed -= 1 if speed != 0
   end
 
   def add_wagon
@@ -88,7 +88,7 @@ class Train
 
   def set_route(route)
     @route = route
-    start_station = @route.stations.first(route)
+    start_station = @route.stations.first
     start_station.add_station(self)
     @current_index = 0
   end
@@ -106,24 +106,26 @@ class Train
   end
 
   def prev_station
-    if current_station != @route.stop_station
-    @route.stations[@current_index - 1]
-  else
-    puts "eto pervaya stancy"
+    if current_station != @route.start_station
+      @route.stations[@current_index - 1]
+    else
+      puts "eto pervaya stancy"
+    end
   end
 
   def go_forward
     current_station.send_train(self)
-    next_station.set_train(self)
+    next_station.handle_train_arrival(self)
     @current_index += 1
   end
 
   def go_back
-    if prev_station
-    current_station.send_train(self)
-    @current_index -= 1
-    current_station.set_train(self)
-  else
-    puts "Nevozmozhno nazat"
+    if current_station.send_train(self)
+      prev_station.handle_train_arrival(self)
+      @current_index -= 1
+      current_station.handle_train_arrival(self)
+    else
+      puts "Nevozmozhno nazat"
+    end
   end
 end
