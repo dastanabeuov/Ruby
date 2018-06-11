@@ -42,9 +42,9 @@ class Route
     @stations.insert(-2, station)
   end
 
-  def delete_station=(station)
-    combo = [start_station, stop_station]
-    if combo.include?(station)
+  def delete_station(station)
+    immutable_stations = [start_station, stop_station]
+    if immutable_stations.include?(station)
       puts "Нелзя из базы удалять начальную и конечную станцию!"
     else
       @stations.delete(station)
@@ -88,7 +88,7 @@ class Train
 
   def set_route(route)
     @route = route
-    start_station = @route.stations.first
+    start_station.handle_train_arrival(self)
     start_station.add_station(self)
     @current_index = 0
   end
@@ -120,10 +120,10 @@ class Train
   end
 
   def go_back
-    if current_station.send_train(self)
+    if prev_station 
+      current_station.send_train(self)
       prev_station.handle_train_arrival(self)
       @current_index -= 1
-      current_station.handle_train_arrival(self)
     else
       puts "Nevozmozhno nazat"
     end
