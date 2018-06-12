@@ -88,8 +88,7 @@ class Train
 
   def set_route(route)
     @route = route
-    start_station.handle_train_arrival(self)
-    start_station.add_station(self)
+    route.start_station.handle_train_arrival(self)
     @current_index = 0
   end
 
