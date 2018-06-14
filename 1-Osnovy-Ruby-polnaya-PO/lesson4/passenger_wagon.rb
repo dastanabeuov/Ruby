@@ -1,5 +1,8 @@
-class PassengerWagon < Wagon
-  def initialize(number)
-    super(number, Passenger)
+class PassengerWagon
+  
+  def add_pass(number, type='Пассажирский')
+    @pass_wagon = type
+    @number = number
   end
+
 end
