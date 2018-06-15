@@ -1,10 +1,20 @@
-require_relative "cargo_wagon.rb"
+require_relative "train.rb"
 
 class CargoTrain < Train
+  attr_accessor :cargo_train
 
-  def add_car_wagon_for_cargotrain
-    @car_train = @car_wagon
-    @number = @number
+  def initialize
+    super(name, type='cargo')
+    @name = name
+    @type = type
+  end
+
+  def add_wagon(cargo)
+    if cargo.instance_of?(CargoWagon)
+      super(cargo)
+    else
+      puts 'Можно добавлять только грузовые вагоны'
+    end
   end
 
 end

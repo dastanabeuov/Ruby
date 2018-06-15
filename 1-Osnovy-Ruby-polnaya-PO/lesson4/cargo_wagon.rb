@@ -1,8 +1,7 @@
 class CargoWagon
+  attr_accessor :number
 
-  def add_car(number, type='Грузовой')
-    @car_Wagon = type
+  def initialize(number)
     @number = number
   end
-
 end

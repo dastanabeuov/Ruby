@@ -8,15 +8,19 @@ class Train
     @speed = 0
   end
 
-  def add_wagon
-    @wagons += 1 if speed == 0
+  def add_wagon(wagon)
+    if speed.zero?
+      @wagon << wagon
+    else
+      puts 'Нельзя прицепить вагон'
+    end
   end
 
-  def remove_wagon
-    if @speed == 0 && wagons > 0
-      @wagons -= 1
+  def remove_wagon(wagon)
+    if @wagons.include?(wagon) && speed == 0
+      @wagons.delete(wagon)
     else
-      puts "Ne vizmozhno otceplyat vagon tak kak poezd dvijetsa"
+      puts 'Нельзя отцепить вагон'
     end
   end
 

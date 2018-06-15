@@ -1,8 +1,7 @@
 class PassengerWagon
-  
-  def add_pass(number, type='Пассажирский')
-    @pass_wagon = type
+  attr_accessor :number
+
+  def initialize(number)
     @number = number
   end
-
 end
