@@ -1,9 +1,9 @@
 require_relative "train.rb"
 
 class PassengerTrain < Train
-  attr_accessor :number
+  attr_accessor :number #getter and setter
 
-  def initialize(number)
+  def initialize(number) #
     super(number, 'pass')
   end
 

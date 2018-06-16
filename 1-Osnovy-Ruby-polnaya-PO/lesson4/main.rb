@@ -9,4 +9,3 @@ require_relative "build.rb"
 
 b = Build.new
 b.run
-b.menu

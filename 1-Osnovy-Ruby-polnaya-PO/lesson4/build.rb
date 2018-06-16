@@ -1,4 +1,6 @@
-class Main
+
+class Build
+
   def initialize
     @stations = []
     @trains = []
@@ -24,7 +26,7 @@ class Main
     7. Переместить поезд по маршрутуи назад
     8. Просмотреть список станций
     9. Просмотреть список поездов на станции
-    Введите exit чтобы выйти
+    10. Введите exit чтобы выйти
     )
 
     loop do
@@ -51,6 +53,8 @@ class Main
         stations_list
       when 9
         station_trains
+      when 10
+        exit
       end
     end
   end
@@ -87,17 +91,13 @@ class Main
   end
 
   def create_train
-    puts 'Введите номер поезда: '
-    number = gets.to_i
-
     select_type
     if @choice == 1
       train = PassangerTrain.new(number)
-    elsif @choice == 2
+    else
       train = CargoTrain.new(number)
+      @trains << train
     end
-
-    @trains << train
   end
 
   def create_route
