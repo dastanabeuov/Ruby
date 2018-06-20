@@ -18,7 +18,7 @@ class Station
     if trains.include?(train)
       @trains.delete(train)
     else
-      puts "Нет в базе данных!"
+      puts "Мы не можем удалить из базы, так как нет в базе такой информаций!"
     end
   end
 end

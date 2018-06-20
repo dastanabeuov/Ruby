@@ -10,9 +10,9 @@ class Train
 
   def add_wagon(wagon)
     if speed.zero?
-      @wagon << wagon
+      @wagons << wagon
     else
-      puts 'Нельзя прицепить вагон'
+      puts 'Нельзя прицепить вагон когда поезд движется'
     end
   end
 
@@ -20,7 +20,7 @@ class Train
     if @wagons.include?(wagon) && speed == 0
       @wagons.delete(wagon)
     else
-      puts 'Нельзя отцепить вагон'
+      puts 'Нельзя отцепить вагон - так как в базе может быть нет такого ВАГОНА или поезд не остановился еще'
     end
   end
 
@@ -34,7 +34,7 @@ class Train
     if route
       @route.stations[@current_index + 1]
     else
-      puts "Znachenya marshruta otsutstvuet"
+      puts "Значение в маршруте не существует, сперва нужно задать маршут поезду"
     end
   end
 
@@ -46,7 +46,7 @@ class Train
     if current_station != @route.start_station
       @route.stations[@current_index - 1]
     else
-      puts "eto pervaya stancy"
+      puts "Это первая станция"
     end
   end
 
@@ -57,17 +57,15 @@ class Train
   end
 
   def go_back
-    if prev_station 
+    if prev_station
       current_station.send_train(self)
       prev_station.handle_train_arrival(self)
       @current_index -= 1
     else
-      puts "Nevozmozhno nazat"
+      puts "Не возможно движение назат, так как это первая станция"
     end
   end
 
-  protected
-  
   def speed_up
     @speed += 1
   end

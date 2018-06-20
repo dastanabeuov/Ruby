@@ -1,20 +1,31 @@
 require_relative "train.rb"
 
 class CargoTrain < Train
-  attr_accessor :cargo_train
+  attr_accessor :number
 
-  def initialize
-    super(name, type='cargo')
-    @name = name
+  def initialize(number, type='cargo')
+    @number = number
     @type = type
   end
 
-  def add_wagon(cargo)
-    if cargo.instance_of?(CargoWagon)
-      super(cargo)
+  def add_wagon
+    puts "Введите цифру (2) для добавления --ВАГОНА-- грузовому поезду"
+    choice = gets.to_i
+    if choice == 2
+      super(CargoWagon)
+      puts "Вагон добавлен к поезду"
     else
-      puts 'Можно добавлять только грузовые вагоны'
+      puts 'Ошибка типа вагона - к грузовому поезду можно добавить только грузовые ВАГОНЫ'
     end
   end
 
+end
+
+class CargoWagon
+  attr_accessor :number, :type
+
+  def initialize(number, type='cargo')
+    @number = number
+    @type = type
+  end
 end
