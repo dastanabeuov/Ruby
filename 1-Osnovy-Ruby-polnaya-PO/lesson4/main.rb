@@ -17,8 +17,7 @@ require_relative "rout.rb"
 require_relative "passenger_train.rb"
 require_relative "cargo_train.rb"
 
-require_relative "build.rb"
+require_relative "interface.rb"
 
-b = Build.new
+b = Interface.new
 b.run
-b.menu
