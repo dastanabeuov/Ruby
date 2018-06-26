@@ -1,7 +1,5 @@
-class PassengerWagon
-  attr_accessor :number
-
+class PassengerWagon < Wagon
   def initialize(number)
-    @number = number
+    super(number, :pass)
   end
 end

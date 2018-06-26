@@ -1,20 +1,32 @@
 #текстовый интерфейс делать следующее:
-     #- Создавать станции
-     #- Создавать поезда
-     #- Создавать маршруты и управлять станциями в нем (добавлять, удалять)
-     #- Назначать маршрут поезду
-     #- Добавлять вагоны к поезду
-     #- Отцеплять вагоны от поезда
-     #- Перемещать поезд по маршруту вперед и назад
-     #- Просматривать список станций и список поездов на станции
-
+ #- Создавать станции
+ #- Создавать поезда
+ #- Создавать маршруты и управлять станциями в нем (добавлять, удалять)
+ #- Назначать маршрут поезду
+ #- Добавлять вагоны к поезду
+ #- Отцеплять вагоны от поезда
+ #- Перемещать поезд по маршруту вперед и назад
+ #- Просматривать список станций и список поездов на станции
+require_relative "info.rb"
 class Interface
+  attr_reader :trains, :stations, :wagons, :routes
 
   def initialize
     @stations = []
     @trains = []
     @routes = []
     @wagons = []
+  end
+
+  def create
+    @stations << Station.new("ALmaty")
+    @stations << Station.new("Astana")
+    @trains << PassengerTrain.new(1)
+    @wagons << Wagon.new(1, :pass)
+    @trains << CargoTrain.new(2)
+    @wagons << Wagon.new(2, :cargo)
+    @routes << Route.new(@stations[0], @stations[2], 1)
+    @trains[0].set_route(@routes[0])
   end
 
   def run
@@ -26,45 +38,34 @@ class Interface
   def menu
 
   loop do
-    puts %q(
-    0. Создать станцию
-    1. Создать поезд
-    2. Создать маршрут
-    3. Назначить маршрут поезду
-    4. Добавить вагон к поезду
-    5. Отцепить вагон от поезда
-    6. Переместить поезд по маршруту вперед
-    7. Переместить поезд по маршрутуи назад
-    8. Просмотреть список станций
-    9. Просмотреть список поездов на станции
-    Введите 10 чтобы выйти)
-
-    puts 'Введите команду:'
+    puts "---------------------"
+    puts ASK_LIST_ITEM
+    puts MAIN_MENU
     choice = gets.to_i
     case choice
-      when 0
-      create_station
-      when 1
-      create_train
-      when 2
-      create_route
-      when 3
+    when 0
+      add_station
+    when 1
+      add_train
+    when 2
+      add_wagon
+    when 3
+      add_route
+    when 4
       assign_route
-      when 4
+    when 5
       add_wagon_to_train
-      when 5
+    when 6
       remove_wagon_from_train
-      when 6
-      move_train_forward
-      when 7
+    when 7
       move_train_back
-      when 8
+    when 8
       stations_list
-      when 9
+    when 9
       station_trains
-      when 10
+    when 10
       exit
-      end
+    end
     end
   end
 
@@ -81,52 +82,76 @@ class Interface
   end
 
   def find_wagon(number)
-    @wagons.find { |wagon| wagons.number == number }
+    @wagons.find(number)
   end
 
-  def create_station
+  def add_station
+    puts "Список станций: #{@stations}"
     puts 'Введите название станции:'
     station_name = gets.chomp
     station = Station.new(station_name)
-    station.handle_train_arrival(self)
     @stations << station
-    puts 'Станция создано'
+    puts "Станция #{@stations} создано"
   end
 
-  def create_train
+  def add_train
+    puts "Список поездов: #{@trains}"
     puts "Выберите тип:  1.Пассажирский  2.Грузовой!"
     choice = gets.to_i
     puts 'Введите номер поезда:'
-    number = gets.to_i
+    number_train = gets.to_i
     if choice == 1
-      @trains << PassengerTrain.new(number)
-      puts "Пассажирский поезд успешно создан"
+      @trains << PassengerTrain.new(number_train)
+      puts "Пассажирский поезд #{@trains} создан"
     elsif choice == 2
-      @trains << CargoTrain.new(number)
-      puts "Грузовой поезд успешно создан"
+      @trains << CargoTrain.new(number_train)
+      puts "Грузовой поезд #{@trains} создан"
     end
   end
 
-  def create_route
+  def add_wagon
+    puts "Список вагонов: #{@wagons}"
+    puts "Введите номер вагона"
+    number_wagon = gets.to_i
+    puts "Выберите тип:  1.Пассажирский  2.Грузовой!"
+    choice = gets.to_i
+    if choice == 1
+      @wagons << Wagon.new(number_wagon, :pass)
+    elsif choice == 2
+      @wagons << Wagon.new(number_wagon, :cargo)
+    else
+      puts ERRORE
+    end
+  end
+
+  def add_route
+    puts "Список маршрутов: #{@routes}"
     puts 'Введите имя первой станций'
     start_station = gets.chomp
     puts 'Введите имя конечной станций'
     stop_station = gets.chomp
     puts 'Введите номер маршута'
-    number_route = gets.chomp
-    @routes << Route.new(start_station, stop_station, number_route)
-    puts "Новый маршрут успешно создан"
+    number_route = gets.to_i
+    if number_route == @routes
+      puts WRONG_ATTR
+    else
+      @routes << Route.new(start_station, stop_station, number_route)
+      puts SUCCESS
+    end
   end
 
   def assign_route
+    puts "Список поездов: #{@trains}"
     puts 'Введите номер поезда:'
     number_train = gets.to_i
     train = find_train(number_train)
+    puts "Список маршрутов: #{@routes}"
     puts 'Введите номер маршрута:'
     number_route = gets.to_i
     route = find_route(number_route)
     if route && train
-      train.set_route(route)
+      @trains << train
+      @stations << route
       puts "Маршут успешно задан текущему поезду"
     else
       puts 'Невозможно назначить маршрут поезду'
@@ -134,43 +159,47 @@ class Interface
   end
 
   def add_wagon_to_train
+    puts "Список вагонов: #{@wagons}"
     puts "Введите номер вагона:"
     number_wagon = gets.to_i
     wagon = find_wagon(number_wagon)
-    puts "Выберите тип:  1.Пассажирский  2.Грузовой!"
-    choice = gets.to_i
+    puts "Список поездов: #{@trains}"
     puts "Введите номер поезда"
     number_train = gets.to_i
     train = find_train(number_train)
-    if choice == 1
-      paswagon = PassengerWagon.new(number_wagon)
-      @wagons << paswagon
+    puts "Выберите тип:  1.Пассажирский  2.Грузовой!"
+    choice = gets.to_i
+    if choice == 1 && wagon && train
+      @trains << PassengerTrain.new(number_wagon)
       puts "Пассажирский ВАГОН добавлен"
-    elsif choice == 2
-      cargowagon = CargoWagon.new(number)
-      @wagons << cargowagon
+    elsif choice == 2 && wagon && train
+      @trains << CargoTrain.new(number_wagon)
       puts "Грузовой ВАГОН добавлен"
     else
-      puts "Вы не выбрали тип ВАГОНА"
+      puts WRONG_ATTR
     end
   end
 
   def remove_wagon_from_train
+    puts "Список вагонов: #{@wagons}"
     puts 'Введите номер вагона:'
     number_wagon = gets.to_i
     wagon = find_wagon(number_wagon)
-    puts 'Введите номер поезда: '
+    puts "Список поездов: #{@trains}"
+    puts 'Введите номер поезда:'
     number_train = gets.to_i
     train = find_train(number_train)
     if train && wagon
-      train.remove_wagon(wagon)
+      @wagons.delete(wagon)
       puts "Вагон успешно отцеплен"
+      puts "#{@wagons}"
     else
-      puts 'Невозможно oтцепить вагон, так как в базе нет таких данных или ошибка ввода параметров'
+      puts ERRORE
     end
   end
 
   def move_train_forward
+    puts "Список поездов: #{@trains}"
     puts 'Введите номер поезда:'
     number = gets.to_i
     train = find_train(number)
@@ -182,6 +211,7 @@ class Interface
   end
 
   def move_train_back
+    puts "Список поездов: #{@trains}"
     puts 'Введите номер поезда:'
     number = gets.to_i
     train = find_train(number)
@@ -193,15 +223,17 @@ class Interface
   end
 
   def stations_list
+    puts "Список станций"
     @stations.each { |station| puts station.name }
   end
 
   def station_trains
-    puts 'Введите имя станции: '
-    name = gets.chomp
-    station = find_station(name)
+    puts "Список станций: #{@stations}"
+    puts 'Введите имя станции:'
+    name_station = gets.chomp
+    station = find_station(name_station)
     if station
-      puts station.trains
+      puts "Список поездов на станций: #{@stations}"
     else
       puts 'Такой станции нет'
     end

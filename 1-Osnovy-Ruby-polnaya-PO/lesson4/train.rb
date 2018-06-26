@@ -1,7 +1,7 @@
 class Train
   attr_reader :number, :type, :wagons, :speed
 
-  def initialize(number, type, wagons)
+  def initialize(number, type)
     @number = number
     @type = type
     @wagons = wagons
@@ -31,7 +31,7 @@ class Train
   end
 
   def next_station
-    if route
+    if @route
       @route.stations[@current_index + 1]
     else
       puts "Значение в маршруте не существует, сперва нужно задать маршут поезду"
