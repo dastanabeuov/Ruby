@@ -5,11 +5,9 @@ class CargoTrain < Train
     super(number, :cargo)
   end
 
-  def add_wagon(wagon)
+  def add_wagon_cargo(wagon)
     if wagon.instance_of?(CargoWagon)
       super
-    else
-      false
     end
   end
 end

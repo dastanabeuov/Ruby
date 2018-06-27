@@ -9,7 +9,6 @@
  #- Просматривать список станций и список поездов на станции
 require_relative "info.rb"
 class Interface
-  attr_reader :trains, :stations, :wagons, :routes
 
   def initialize
     @stations = []
@@ -37,35 +36,35 @@ class Interface
 
   def menu
 
-  loop do
-    puts "---------------------"
-    puts ASK_LIST_ITEM
-    puts MAIN_MENU
-    choice = gets.to_i
-    case choice
-    when 0
-      add_station
-    when 1
-      add_train
-    when 2
-      add_wagon
-    when 3
-      add_route
-    when 4
-      assign_route
-    when 5
-      add_wagon_to_train
-    when 6
-      remove_wagon_from_train
-    when 7
-      move_train_back
-    when 8
-      stations_list
-    when 9
-      station_trains
-    when 10
-      exit
-    end
+    loop do
+      puts "_________________"
+      puts ASK_LIST_ITEM
+      puts MAIN_MENU
+      choice = gets.to_i
+      case choice
+      when 0
+        add_station
+      when 1
+        add_train
+      when 2
+        add_wagon
+      when 3
+        add_route
+      when 4
+        assign_route_train
+      when 5
+        add_wagon_to_train
+      when 6
+        remove_wagon_from_train
+      when 7
+        move_train_back
+      when 8
+        stations_list
+      when 9
+        station_trains
+      when 10
+        exit
+      end
     end
   end
 
@@ -85,54 +84,72 @@ class Interface
     @wagons.find(number)
   end
 
+  def stations_list
+    puts "_________"
+    @stations.each { |station| puts station.name }
+  end
+
   def add_station
-    puts "Список станций: #{@stations}"
+    stations_list
     puts 'Введите название станции:'
     station_name = gets.chomp
     station = Station.new(station_name)
     @stations << station
-    puts "Станция #{@stations} создано"
+    puts "Станция #{station_name} создано"
+  end
+
+  def trains_list
+    puts "_________"
+    @trains.each { |train| puts train.number }
   end
 
   def add_train
-    puts "Список поездов: #{@trains}"
-    puts "Выберите тип:  1.Пассажирский  2.Грузовой!"
-    choice = gets.to_i
+    trains_list
     puts 'Введите номер поезда:'
     number_train = gets.to_i
+    puts "Выберите тип:  1.Пассажирский  2.Грузовой!"
+    choice = gets.to_i
     if choice == 1
       @trains << PassengerTrain.new(number_train)
-      puts "Пассажирский поезд #{@trains} создан"
+      puts "Пассажирский поезд #{number_train} создан"
     elsif choice == 2
       @trains << CargoTrain.new(number_train)
-      puts "Грузовой поезд #{@trains} создан"
+      puts "Грузовой поезд #{number_train} создан"
     end
   end
 
+  def wagons_list
+    puts "_________"
+    @wagons.each { |wagon| puts wagon }
+  end
+
   def add_wagon
-    puts "Список вагонов: #{@wagons}"
+    wagons_list
     puts "Введите номер вагона"
     number_wagon = gets.to_i
     puts "Выберите тип:  1.Пассажирский  2.Грузовой!"
     choice = gets.to_i
     if choice == 1
       @wagons << Wagon.new(number_wagon, :pass)
+      puts "Пассажирский вагон #{number_wagon} создан"
     elsif choice == 2
       @wagons << Wagon.new(number_wagon, :cargo)
+      puts "Грузовой вагон #{number_wagon} создан"
     else
-      puts ERRORE
+      puts UNKNOWN_COMAND
     end
   end
 
   def add_route
-    puts "Список маршрутов: #{@routes}"
-    puts 'Введите имя первой станций'
+    stations_list
+    puts 'Выберите имя первой станций'
     start_station = gets.chomp
-    puts 'Введите имя конечной станций'
+    puts 'Выберите имя конечной станций'
     stop_station = gets.chomp
+    routes_list
     puts 'Введите номер маршута'
     number_route = gets.to_i
-    if number_route == @routes
+    if number_route == nil || start_station == nil || stop_station == nil
       puts WRONG_ATTR
     else
       @routes << Route.new(start_station, stop_station, number_route)
@@ -140,66 +157,63 @@ class Interface
     end
   end
 
-  def assign_route
-    puts "Список поездов: #{@trains}"
-    puts 'Введите номер поезда:'
-    number_train = gets.to_i
-    train = find_train(number_train)
-    puts "Список маршрутов: #{@routes}"
+  def routes_list
+    puts "_________"
+    @routes.each { |route| puts route.number }
+  end
+
+  def assign_route_train
+    routes_list
     puts 'Введите номер маршрута:'
     number_route = gets.to_i
     route = find_route(number_route)
+    trains_list
+    puts 'Введите номер поезда:'
+    number_train = gets.to_i
+    train = find_train(number_train)
     if route && train
-      @trains << train
-      @stations << route
-      puts "Маршут успешно задан текущему поезду"
+      @routes << train.set_route(route)
+      puts SUCCESS
     else
-      puts 'Невозможно назначить маршрут поезду'
+      puts  UNKNOWN_COMAND
     end
   end
 
   def add_wagon_to_train
-    puts "Список вагонов: #{@wagons}"
+    wagons_list
     puts "Введите номер вагона:"
     number_wagon = gets.to_i
     wagon = find_wagon(number_wagon)
-    puts "Список поездов: #{@trains}"
+    trains_list
     puts "Введите номер поезда"
     number_train = gets.to_i
     train = find_train(number_train)
-    puts "Выберите тип:  1.Пассажирский  2.Грузовой!"
-    choice = gets.to_i
-    if choice == 1 && wagon && train
-      @trains << PassengerTrain.new(number_wagon)
-      puts "Пассажирский ВАГОН добавлен"
-    elsif choice == 2 && wagon && train
-      @trains << CargoTrain.new(number_wagon)
-      puts "Грузовой ВАГОН добавлен"
+    if wagon && train
+      @wagons << wagon
+    puts SUCCESS
     else
-      puts WRONG_ATTR
+      puts UNKNOWN_COMAND
     end
   end
 
   def remove_wagon_from_train
-    puts "Список вагонов: #{@wagons}"
-    puts 'Введите номер вагона:'
-    number_wagon = gets.to_i
-    wagon = find_wagon(number_wagon)
-    puts "Список поездов: #{@trains}"
+    trains_list
     puts 'Введите номер поезда:'
     number_train = gets.to_i
     train = find_train(number_train)
-    if train && wagon
-      @wagons.delete(wagon)
+    puts train.wagons
+    puts 'Введите номер вагона:'
+    number_wagon = gets.to_i
+    if train.wagons == number_wagon
+      train.wagons - 1
       puts "Вагон успешно отцеплен"
-      puts "#{@wagons}"
     else
-      puts ERRORE
+      puts UNKNOWN_COMAND
     end
   end
 
   def move_train_forward
-    puts "Список поездов: #{@trains}"
+    trains_list
     puts 'Введите номер поезда:'
     number = gets.to_i
     train = find_train(number)
@@ -211,7 +225,7 @@ class Interface
   end
 
   def move_train_back
-    puts "Список поездов: #{@trains}"
+    trains_list
     puts 'Введите номер поезда:'
     number = gets.to_i
     train = find_train(number)
@@ -223,17 +237,17 @@ class Interface
   end
 
   def stations_list
-    puts "Список станций"
+    puts "__Список станций__"
     @stations.each { |station| puts station.name }
   end
 
   def station_trains
-    puts "Список станций: #{@stations}"
+    stations_list
     puts 'Введите имя станции:'
     name_station = gets.chomp
     station = find_station(name_station)
     if station
-      puts "Список поездов на станций: #{@stations}"
+      puts "Список поездов на станций: #{station.trains}"
     else
       puts 'Такой станции нет'
     end
