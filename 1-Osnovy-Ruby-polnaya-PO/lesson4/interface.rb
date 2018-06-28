@@ -21,9 +21,9 @@ class Interface
     @stations << Station.new("ALmaty")
     @stations << Station.new("Astana")
     @trains << PassengerTrain.new(1)
-    @wagons << Wagon.new(1, :pass)
+    @wagons << PassengerWagon.new(1)
     @trains << CargoTrain.new(2)
-    @wagons << Wagon.new(2, :cargo)
+    @wagons << CargoWagon.new(2)
     @routes << Route.new(@stations[0], @stations[2], 1)
     @trains[0].set_route(@routes[0])
   end
@@ -93,8 +93,7 @@ class Interface
     stations_list
     puts 'Введите название станции:'
     station_name = gets.chomp
-    station = Station.new(station_name)
-    @stations << station
+    @stations << Station.new(station_name)
     puts "Станция #{station_name} создано"
   end
 
@@ -130,10 +129,10 @@ class Interface
     puts "Выберите тип:  1.Пассажирский  2.Грузовой!"
     choice = gets.to_i
     if choice == 1
-      @wagons << Wagon.new(number_wagon, :pass)
+      @wagons << PassengerWagon.new(number_wagon)
       puts "Пассажирский вагон #{number_wagon} создан"
     elsif choice == 2
-      @wagons << Wagon.new(number_wagon, :cargo)
+      @wagons << CargoWagon.new(number_wagon)
       puts "Грузовой вагон #{number_wagon} создан"
     else
       puts UNKNOWN_COMAND
@@ -144,16 +143,19 @@ class Interface
     stations_list
     puts 'Выберите имя первой станций'
     start_station = gets.chomp
+    first = find_station(start_station)
     puts 'Выберите имя конечной станций'
     stop_station = gets.chomp
+    last = find_station(stop_station)
     routes_list
     puts 'Введите номер маршута'
     number_route = gets.to_i
-    if number_route == nil || start_station == nil || stop_station == nil
-      puts WRONG_ATTR
-    else
+    route = find_route(number_route)
+    if route && first && last
       @routes << Route.new(start_station, stop_station, number_route)
       puts SUCCESS
+    else
+      puts WRONG_ATTR
     end
   end
 
@@ -163,16 +165,16 @@ class Interface
   end
 
   def assign_route_train
-    routes_list
-    puts 'Введите номер маршрута:'
-    number_route = gets.to_i
-    route = find_route(number_route)
     trains_list
     puts 'Введите номер поезда:'
     number_train = gets.to_i
     train = find_train(number_train)
+    routes_list
+    puts 'Введите номер маршрута:'
+    number_route = gets.to_i
+    route = find_route(number_route)
     if route && train
-      @routes << train.set_route(route)
+      train.set_route(route)
       puts SUCCESS
     else
       puts  UNKNOWN_COMAND
@@ -180,16 +182,16 @@ class Interface
   end
 
   def add_wagon_to_train
-    wagons_list
-    puts "Введите номер вагона:"
-    number_wagon = gets.to_i
-    wagon = find_wagon(number_wagon)
     trains_list
     puts "Введите номер поезда"
     number_train = gets.to_i
     train = find_train(number_train)
+    wagons_list
+    puts "Введите номер вагона:"
+    number_wagon = gets.to_i
+    wagon = find_wagon(number_wagon)
     if wagon && train
-      @wagons << wagon
+      train.add_wagon(wagon)
     puts SUCCESS
     else
       puts UNKNOWN_COMAND
@@ -204,8 +206,8 @@ class Interface
     puts train.wagons
     puts 'Введите номер вагона:'
     number_wagon = gets.to_i
-    if train.wagons == number_wagon
-      train.wagons - 1
+    if train.wagons.include?(number_wagon)
+      train.wagons.remove_wagon(number_wagon)
       puts "Вагон успешно отцеплен"
     else
       puts UNKNOWN_COMAND
@@ -247,9 +249,10 @@ class Interface
     name_station = gets.chomp
     station = find_station(name_station)
     if station
-      puts "Список поездов на станций: #{station.trains}"
+      trains = station.trains
+      trains.each_with_index { |item, index| puts "#{index + 1}. #{item}"  }
     else
-      puts 'Такой станции нет'
+      puts 'На станций нет поездов'
     end
   end
 
