@@ -24,7 +24,7 @@ class Interface
     @wagons << PassengerWagon.new(1)
     @trains << CargoTrain.new(2)
     @wagons << CargoWagon.new(2)
-    @routes << Route.new(@stations[0], @stations[2], 1)
+    @routes << Route.new(@stations[0], @stations[-1], 1)
     @trains[0].set_route(@routes[0])
   end
 
@@ -81,7 +81,7 @@ class Interface
   end
 
   def find_wagon(number)
-    @wagons.find(number)
+    @wagons.find { |wagon| wagon.number == number }
   end
 
   def stations_list
@@ -119,7 +119,7 @@ class Interface
 
   def wagons_list
     puts "_________"
-    @wagons.each { |wagon| puts wagon }
+    @wagons.each { |wagon| puts wagon.number }
   end
 
   def add_wagon
@@ -143,16 +143,15 @@ class Interface
     stations_list
     puts 'Выберите имя первой станций'
     start_station = gets.chomp
-    first = find_station(start_station)
+    start = find_station(start_station)
     puts 'Выберите имя конечной станций'
     stop_station = gets.chomp
-    last = find_station(stop_station)
+    stop = find_station(stop_station)
     routes_list
-    puts 'Введите номер маршута'
+    puts 'Введите новый номер маршута'
     number_route = gets.to_i
-    route = find_route(number_route)
-    if route && first && last
-      @routes << Route.new(start_station, stop_station, number_route)
+    if start && stop
+      @routes << Route.new(start, stop, number_route)
       puts SUCCESS
     else
       puts WRONG_ATTR
@@ -203,12 +202,21 @@ class Interface
     puts 'Введите номер поезда:'
     number_train = gets.to_i
     train = find_train(number_train)
-    puts train.wagons
+    puts train.number
     puts 'Введите номер вагона:'
     number_wagon = gets.to_i
-    if train.wagons.include?(number_wagon)
-      train.wagons.remove_wagon(number_wagon)
+    wagon = find_wagon(number_wagon)
+    if wagon
+      remove_wagon(wagon)
       puts "Вагон успешно отцеплен"
+    else
+      puts UNKNOWN_COMAND
+    end
+  end
+
+  def remove_wagon(wagon)
+    if @wagons.include?(wagon)
+      @wagons.delete(wagon)
     else
       puts UNKNOWN_COMAND
     end
@@ -250,7 +258,7 @@ class Interface
     station = find_station(name_station)
     if station
       trains = station.trains
-      trains.each_with_index { |item, index| puts "#{index + 1}. #{item}"  }
+      trains.each_with_index { |train, index| puts "#{index + 1}. #{train.number}"  }
     else
       puts 'На станций нет поездов'
     end
