@@ -24,7 +24,7 @@ class Interface
     @wagons << PassengerWagon.new(1)
     @trains << CargoTrain.new(2)
     @wagons << CargoWagon.new(2)
-    @routes << Route.new(@stations[0], @stations[-1], 1)
+    @routes << Route.new(@stations[0], @stations[-2], 1)
     @trains[0].set_route(@routes[0])
   end
 
@@ -197,26 +197,23 @@ class Interface
     end
   end
 
-  def remove_wagon_from_train
-    trains_list
-    puts 'Введите номер поезда:'
-    number_train = gets.to_i
-    train = find_train(number_train)
-    puts train.number
-    puts 'Введите номер вагона:'
-    number_wagon = gets.to_i
-    wagon = find_wagon(number_wagon)
-    if wagon
-      remove_wagon(wagon)
-      puts "Вагон успешно отцеплен"
-    else
-      puts UNKNOWN_COMAND
-    end
+  def train_number_wagon(wagon)
+    wagon.each { |wagon| puts wagon.number }
   end
 
-  def remove_wagon(wagon)
-    if @wagons.include?(wagon)
-      @wagons.delete(wagon)
+  def remove_wagon_from_train
+    trains_list
+    puts 'Введите номер ПОЕЗДА:'
+    number_train = gets.to_i
+    train = find_train(number_train)
+    wagons = train.wagons
+    train_number_wagon(wagons)
+    puts 'Введите номер ВАГОНА:'
+    number_wagon = gets.to_i
+    wagon = find_wagon(number_wagon)
+    if train.wagons.include?(wagon)
+      train.wagons.remove_wagon(wagon)
+      puts "Вагон успешно отцеплен"
     else
       puts UNKNOWN_COMAND
     end
