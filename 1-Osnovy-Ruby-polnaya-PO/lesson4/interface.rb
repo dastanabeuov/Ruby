@@ -197,8 +197,8 @@ class Interface
     end
   end
 
-  def train_number_wagon(wagon)
-    wagon.each { |wagon| puts wagon.number }
+  def train_wagons_with_numbers(train)
+    train.wagons.each { |wagon| puts wagon.number }
   end
 
   def remove_wagon_from_train
@@ -206,13 +206,11 @@ class Interface
     puts 'Введите номер ПОЕЗДА:'
     number_train = gets.to_i
     train = find_train(number_train)
-    wagons = train.wagons
-    train_number_wagon(wagons)
+    train_wagons_with_numbers(train)
     puts 'Введите номер ВАГОНА:'
     number_wagon = gets.to_i
-    wagon = find_wagon(number_wagon)
-    if train.wagons.include?(wagon)
-      train.wagons.remove_wagon(wagon)
+    if find_wagon(number_wagon)
+      train.wagons.delete(number_wagon)
       puts "Вагон успешно отцеплен"
     else
       puts UNKNOWN_COMAND
