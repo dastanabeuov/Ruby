@@ -210,7 +210,7 @@ class Interface
     puts 'Введите номер ВАГОНА:'
     number_wagon = gets.to_i
     if find_wagon(number_wagon)
-      train.wagons.delete(number_wagon)
+      train.remove_wagon(number_wagon)
       puts "Вагон успешно отцеплен"
     else
       puts UNKNOWN_COMAND
@@ -239,11 +239,6 @@ class Interface
     else
       puts 'Невозможно переместить поезд по маршруту назад'
     end
-  end
-
-  def stations_list
-    puts "__Список станций__"
-    @stations.each { |station| puts station.name }
   end
 
   def station_trains

@@ -19,8 +19,6 @@ class Train
   def remove_wagon(wagon)
     if @wagons.include?(wagon) && speed == 0
       @wagons.delete(wagon)
-    else
-      puts 'Нельзя отцепить вагон - так как в базе может быть нет такого ВАГОНА или поезд не остановился еще'
     end
   end
 
