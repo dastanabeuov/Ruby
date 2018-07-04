@@ -57,7 +57,7 @@ class Interface
       when 6
         remove_wagon_from_train
       when 7
-        move_train_back
+        move_train
       when 8
         stations_list
       when 9
@@ -198,46 +198,42 @@ class Interface
   end
 
   def train_wagons_with_numbers(train)
-    train.wagons.each { |wagon| puts wagon.number }
+    if @trains.include?(train)
+      train.wagons.each { |wagon| puts wagon }
+    end
   end
 
   def remove_wagon_from_train
     trains_list
-    puts 'Введите номер ПОЕЗДА:'
-    number_train = gets.to_i
-    train = find_train(number_train)
-    train_wagons_with_numbers(train)
-    puts 'Введите номер ВАГОНА:'
-    number_wagon = gets.to_i
-    if find_wagon(number_wagon)
-      train.remove_wagon(number_wagon)
-      puts "Вагон успешно отцеплен"
+    puts 'Выберите номер ПОЕЗДА:'
+    train_number = gets.to_i
+    train = find_train(train_number)
+    result = train_wagons_with_numbers(train)
+    if result
+    puts "Выберите вагона"
+    wagon_number = gets.to_i
+    wagon = find_wagon(wagon_number)
+    train.remove_wagon(wagon)
+    puts SUCCESS
     else
       puts UNKNOWN_COMAND
     end
   end
 
-  def move_train_forward
+  def move_train
     trains_list
     puts 'Введите номер поезда:'
     number = gets.to_i
     train = find_train(number)
-    if train
+    puts "Выберите куда вы хотите передвинуть поезд - 1.Вперед 2.Назат"
+    number = gets.to_i
+    if train && number == 1
       train.go_forward
-    else
-      puts 'Невозможно переместить поезд по маршруту вперед'
-    end
-  end
-
-  def move_train_back
-    trains_list
-    puts 'Введите номер поезда:'
-    number = gets.to_i
-    train = find_train(number)
-    if train
+      puts SUCCESS
+    elsif train && number == 2
       train.go_back
     else
-      puts 'Невозможно переместить поезд по маршруту назад'
+      puts UNKNOWN_COMAND
     end
   end
 

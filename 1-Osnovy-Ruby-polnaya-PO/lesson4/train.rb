@@ -17,7 +17,7 @@ class Train
   end
 
   def remove_wagon(wagon)
-    if @wagons.include?(wagon) && speed == 0
+    if wagons.include?(wagon) && speed == 0
       @wagons.delete(wagon)
     end
   end
