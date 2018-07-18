@@ -1,17 +1,23 @@
-class Train
-  include AssignCompanyName
-  @@counter = 0
-  attr_reader :number, :type, :wagons, :speed
+require_relative "company_name.rb"
+require_relative "instance_counter.rb"
 
+class Train
+  include CompanyName
+  include InstanceCounter
+
+  attr_reader :number, :type, :wagons, :speed
+  @@trains = {}
   def initialize(number, type)
     @number = number
     @type = type
     @wagons = []
     @speed = 0
+    register_instance
+    @@trains[number] = self
   end
 
-  def self.train_find(number)
-    @trains.find { |train| train.number == number }
+  def self.find(number)
+    @@trains[number]
   end
 
   def add_wagon(wagon)

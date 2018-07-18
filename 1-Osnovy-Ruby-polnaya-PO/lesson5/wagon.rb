@@ -1,7 +1,8 @@
+require_relative "company_name.rb"
 class Wagon
-  include AssignCompanyName
+  include CompanyName
+
   attr_reader :number
-  @@counter = 0
   def initialize(number, type)
     @number = number
     @type = type
