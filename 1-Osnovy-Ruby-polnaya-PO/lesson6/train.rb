@@ -91,6 +91,5 @@ class Train
   def validate!
     raise "Аргумент *номер* не должен быть пустым" if number.nil?
     raise "Неправильный формат номера" if number !~ NUMBER_FORMAT
-    raise "Неизвестный тип поезда" unless %i[cargo pass].include?(type)
   end
 end

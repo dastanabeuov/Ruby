@@ -8,7 +8,9 @@
  #- Перемещать поезд по маршруту вперед и назад
  #- Просматривать список станций и список поездов на станции
 require_relative "info.rb"
+require_relative "exeption.rb"
 class Interface
+  include Exeption
 
   def initialize
     @stations = []
@@ -20,11 +22,11 @@ class Interface
   def create
     @stations << Station.new("ALmaty")
     @stations << Station.new("Astana")
-    @trains << PassengerTrain.new(1)
-    @wagons << PassengerWagon.new(1)
-    @trains << CargoTrain.new(2)
-    @wagons << CargoWagon.new(2)
-    @routes << Route.new(@stations[0], @stations[-2], 1)
+    @trains << PassengerTrain.new("qqq-11")
+    @wagons << PassengerWagon.new("qqq-22")
+    @trains << CargoTrain.new("www-11")
+    @wagons << CargoWagon.new("www-22")
+    @routes << Route.new(@stations[0], @stations[-1], 1)
     @trains[0].set_route(@routes[0])
   end
 
@@ -95,6 +97,8 @@ class Interface
     station_name = gets.chomp
     @stations << Station.new(station_name)
     puts "Станция #{station_name} создано"
+  rescue
+    add_station
   end
 
   def trains_list
@@ -115,6 +119,8 @@ class Interface
       @trains << CargoTrain.new(number_train)
       puts "Грузовой поезд #{number_train} создан"
     end
+  rescue
+    add_train
   end
 
   def wagons_list
@@ -137,6 +143,8 @@ class Interface
     else
       puts UNKNOWN_COMAND
     end
+  rescue
+    add_wagon
   end
 
   def add_route
@@ -156,6 +164,8 @@ class Interface
     else
       puts WRONG_ATTR
     end
+  rescue
+    add_route
   end
 
   def routes_list
