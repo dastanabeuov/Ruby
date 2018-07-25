@@ -11,7 +11,7 @@ class Wagon
   def initialize(number, type)
     @number = number
     @type = type
-    init_validate
+    validate!
   end
 
   protected

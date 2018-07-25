@@ -15,7 +15,7 @@ class Train
     @speed = 0
     register_instance
     @@trains[number] = self
-    init_validate
+    validate!
   end
 
   def self.find(number)

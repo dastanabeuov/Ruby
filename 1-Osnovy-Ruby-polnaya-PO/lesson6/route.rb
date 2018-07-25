@@ -9,7 +9,7 @@ class Route
     @stations = [start_station, stop_station]
     @number = number
     register_instance
-    init_validate
+    validate!
   end
 
   def start_station

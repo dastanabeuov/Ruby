@@ -12,7 +12,7 @@ class Station
     @trains = []
     @@all_stations << self
     register_instance
-    init_validate
+    validate!
   end
 
   def self.all
