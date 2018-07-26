@@ -99,7 +99,7 @@ class Interface
     puts "Станция #{station_name} создано"
   rescue RuntimeError => error
     puts "Ошибка: #{error.message}"
-  retry
+    retry
   end
 
   def trains_list
@@ -122,7 +122,7 @@ class Interface
     end
   rescue RuntimeError => error
     puts "Ошибка: #{error.message}"
-  retry
+    retry
   end
 
   def wagons_list
@@ -147,7 +147,7 @@ class Interface
     end
   rescue RuntimeError => error
     puts "Ошибка: #{error.message}"
-  retry
+    retry
   end
 
   def add_route
@@ -169,7 +169,7 @@ class Interface
     end
   rescue Exeption => error
     puts "Ошибка: #{error.message}"
-  retry
+    retry
   end
 
   def routes_list
