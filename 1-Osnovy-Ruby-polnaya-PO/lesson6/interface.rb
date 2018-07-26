@@ -97,9 +97,9 @@ class Interface
     station_name = gets.chomp
     @stations << Station.new(station_name)
     puts "Станция #{station_name} создано"
-    rescue RuntimeError => error
+  rescue RuntimeError => error
     puts "Ошибка: #{error.message}"
-    retry
+  retry
   end
 
   def trains_list
@@ -110,7 +110,7 @@ class Interface
   def add_train
     trains_list
     puts 'Введите номер поезда:'
-    number_train = gets.to_s
+    number_train = gets.chomp
     puts "Выберите тип:  1.Пассажирский  2.Грузовой!"
     choice = gets.to_i
     if choice == 1
@@ -120,9 +120,9 @@ class Interface
       @trains << CargoTrain.new(number_train)
       puts "Грузовой поезд #{number_train} создан"
     end
-    rescue RuntimeError => error
+  rescue RuntimeError => error
     puts "Ошибка: #{error.message}"
-    retry
+  retry
   end
 
   def wagons_list
@@ -133,7 +133,7 @@ class Interface
   def add_wagon
     wagons_list
     puts "Введите номер вагона"
-    number_wagon = gets.to_s
+    number_wagon = gets.chomp
     puts "Выберите тип:  1.Пассажирский  2.Грузовой!"
     choice = gets.to_i
     if choice == 1
@@ -145,9 +145,9 @@ class Interface
     else
       puts UNKNOWN_COMAND
     end
-    rescue RuntimeError => error
+  rescue RuntimeError => error
     puts "Ошибка: #{error.message}"
-    retry
+  retry
   end
 
   def add_route
@@ -167,9 +167,9 @@ class Interface
     else
       puts WRONG_ATTR
     end
-    rescue Exeption => error
+  rescue Exeption => error
     puts "Ошибка: #{error.message}"
-    retry
+  retry
   end
 
   def routes_list

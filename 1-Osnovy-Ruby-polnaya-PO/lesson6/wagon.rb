@@ -15,6 +15,7 @@ class Wagon
   end
 
   protected
+  NUMBER_FORMAT = /^\w{3}-*\w{2}$/
   def validate!
     raise "Номер Вагона не может быть пустым" if number.nil?
     raise "Номер Вагона не сответствует формату" if number !~ NUMBER_FORMAT

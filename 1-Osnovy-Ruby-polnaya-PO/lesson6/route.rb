@@ -8,8 +8,8 @@ class Route
   def initialize(start_station, stop_station, number)
     @stations = [start_station, stop_station]
     @number = number
-    register_instance
     validate!
+    register_instance
   end
 
   def start_station

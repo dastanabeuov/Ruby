@@ -13,9 +13,9 @@ class Train
     @type = type
     @wagons = []
     @speed = 0
+    validate!
     register_instance
     @@trains[number] = self
-    validate!
   end
 
   def self.find(number)
@@ -87,7 +87,7 @@ class Train
   end
 
   protected
-
+  NUMBER_FORMAT = /^\w{3}-*\w{2}$/
   def validate!
     raise "Аргумент *номер* не должен быть пустым" if number.nil?
     raise "Неправильный формат номера" if number !~ NUMBER_FORMAT
