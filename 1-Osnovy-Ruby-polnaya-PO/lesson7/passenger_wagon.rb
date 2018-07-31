@@ -1,10 +1,10 @@
 require_relative "wagon.rb"
 class PassengerWagon < Wagon
-  def initialize(number, general)
-    super(number, :pass, general)
+  def initialize(number, volum)
+    super(number, :pass, volum)
   end
 
-  def take_number
+  def load
     super(1)
   end
 end

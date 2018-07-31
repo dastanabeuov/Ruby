@@ -7,20 +7,21 @@ class Wagon
   include Exeption
 
   attr_reader :number, :total_number, :taken_number
-  def initialize(number, type, general)
+  def initialize(number, type, volum)
     @number = number
     @type = type
-    @total_number = general
+    @total_number = volum
     @taken_number = 0
     validate!
   end
 
-  def reserve(general)
-    raise 'Нет свободных мест' if @taken_number == @total_number
-    @taken_number += general
+  def load(volum)
+    raise 'Нет свободных мест' if @taken_number > @total_number
+    @taken_number += volum
   end
 
   def free
+    raise 'Свободных мест нет' if @total_number == 0 || @total_number < @taken_number
     @total_number - @taken_number
   end
 
