@@ -35,7 +35,7 @@ class Station
     end
   end
 
-  def each_wagon
+  def each_train
     @trains.each { |train| yield(train) }
   end
 

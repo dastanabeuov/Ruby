@@ -6,23 +6,26 @@ class Wagon
   include CompanyName
   include Exeption
 
-  attr_reader :number, :total_number, :taken_number
-  def initialize(number, type, volum)
+  attr_reader :number, :total_volume, :taken_volume
+  def initialize(number, type, volume)
     @number = number
     @type = type
-    @total_number = volum
-    @taken_number = 0
+    @total_volume = volume
+    @taken_volume = 0
     validate!
   end
 
-  def load(volum)
-    raise 'Нет свободных мест' if @taken_number > @total_number
-    @taken_number += volum
+  def take_volume(volume)
+    @taken_volume += take_load(volume)
   end
 
-  def free
-    raise 'Свободных мест нет' if @total_number == 0 || @total_number < @taken_number
-    @total_number - @taken_number
+  def free_volume
+    @total_volume - @taken_volume
+  end
+
+  def take_load(volume)
+    return 0 if volume < 0
+    volume > free_volume ? free_volume : volume
   end
 
   protected

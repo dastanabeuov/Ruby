@@ -18,6 +18,10 @@ class Train
     @@trains[number] = self
   end
 
+  def each_wagon
+    @wagons.each { |wagon| yield(wagon) }
+  end
+
   def self.find(number)
     @@trains[number]
   end

@@ -147,8 +147,8 @@ class Interface
       puts "Пассажирский вагон #{number_wagon} создан"
     elsif choice == 2
       puts "Введите количество объема Вагона"
-      number = gets.to_i
-      @wagons << CargoWagon.new(number_wagon, number)
+      volume = gets.to_i
+      @wagons << CargoWagon.new(number_wagon, volume)
       puts "Грузовой вагон #{number_wagon} создан"
     else
       puts UNKNOWN_COMAND
@@ -265,7 +265,7 @@ class Interface
     name_station = gets.chomp
     station = find_station(name_station)
     if station
-            station.each_wagon do |train|
+            station.each_train do |train|
         puts "№#{train.number} - Тип: #{train.type} - Количество вагонов: #{train.wagons}"
       end
     else
@@ -303,7 +303,7 @@ class Interface
     elsif wagon.instance_of?(CargoWagon)
       puts 'Введите объем: '
       cargo = gets.to_i
-      wagon.reserve(cargo)
+      wagon.take_volume(cargo)
     else
       puts UNKNOWN_COMAND
     end
