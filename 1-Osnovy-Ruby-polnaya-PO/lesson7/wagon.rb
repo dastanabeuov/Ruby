@@ -16,14 +16,14 @@ class Wagon
   end
 
   def take_volume(volume)
-    @taken_volume += take_load(volume)
+    @taken_volume += infact_load(volume)
   end
 
   def free_volume
     @total_volume - @taken_volume
   end
 
-  def take_load(volume)
+  def infact_load(volume)
     return 0 if volume < 0
     volume > free_volume ? free_volume : volume
   end

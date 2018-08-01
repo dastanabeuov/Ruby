@@ -297,9 +297,7 @@ class Interface
     choose = gets.chomp
     wagon = find_wagon(choose)
     if wagon.instance_of?(PassengerWagon)
-      puts 'Введите количесто мест: '
-      pass = gets.to_i
-      wagon.reserve(pass)
+      wagon.take_volume
     elsif wagon.instance_of?(CargoWagon)
       puts 'Введите объем: '
       cargo = gets.to_i

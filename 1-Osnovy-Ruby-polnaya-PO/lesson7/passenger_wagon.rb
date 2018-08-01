@@ -4,7 +4,7 @@ class PassengerWagon < Wagon
     super(number, :pass, volume)
   end
 
-  def load
+  def take_volume
     super(1)
   end
 end
