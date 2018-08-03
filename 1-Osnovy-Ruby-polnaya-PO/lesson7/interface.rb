@@ -108,7 +108,7 @@ class Interface
 
   def trains_list
     puts "_________"
-    @trains.each { |train| puts train.number }
+    @trains.each { |train| puts "№ #{train.number} Тип: #{train.type}" }
   end
 
   def add_train
@@ -131,7 +131,7 @@ class Interface
 
   def wagons_list
     puts "_________"
-    @wagons.each { |wagon| puts wagon.number }
+    @wagons.each { |wagon| puts "№ #{wagon.number} Тип: #{wagon.type} Объем: #{wagon.total_volume}" }
   end
 
   def add_wagon
@@ -275,7 +275,7 @@ class Interface
 
   def wagons_train
     trains_list
-    puts "Выбеите поезд"
+    puts "Выберите поезд"
     choose = gets.chomp
     train = find_train(choose)
     if train.instance_of?(PassengerTrain)
@@ -297,11 +297,15 @@ class Interface
     choose = gets.chomp
     wagon = find_wagon(choose)
     if wagon.instance_of?(PassengerWagon)
-      wagon.take_volume
+      puts 'Введите количество мест'
+      pass = gets.to_i
+      wagon.take_volume(pass)
+      puts SUCCESS
     elsif wagon.instance_of?(CargoWagon)
       puts 'Введите объем: '
       cargo = gets.to_i
       wagon.take_volume(cargo)
+      puts SUCCESS
     else
       puts UNKNOWN_COMAND
     end

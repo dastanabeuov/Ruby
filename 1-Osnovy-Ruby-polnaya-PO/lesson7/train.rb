@@ -27,10 +27,9 @@ class Train
   end
 
   def add_wagon(wagon)
+    return unless @type == wagon.type
     if speed.zero?
       @wagons << wagon
-    else
-      puts 'Нельзя прицепить вагон когда поезд движется'
     end
   end
 
@@ -42,7 +41,7 @@ class Train
 
   def set_route(route)
     @route = route
-    route.start_station.handle_train_arrival(self)
+    route.stations[0].handle_train_arrival(self)
     @current_index = 0
   end
 

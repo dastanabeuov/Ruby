@@ -6,13 +6,20 @@ class Wagon
   include CompanyName
   include Exeption
 
-  attr_reader :number, :total_volume, :taken_volume
+  @@wagons = {}
+  attr_reader :number, :type, :total_volume, :taken_volume
+  attr_accessor :train
   def initialize(number, type, volume)
     @number = number
     @type = type
     @total_volume = volume
     @taken_volume = 0
     validate!
+    @@wagons[number] = self
+  end
+
+  def add_to_train(train)
+    @train = train
   end
 
   def take_volume(volume)
