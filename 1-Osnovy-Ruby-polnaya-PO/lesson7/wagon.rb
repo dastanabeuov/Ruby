@@ -18,10 +18,6 @@ class Wagon
     @@wagons[number] = self
   end
 
-  def add_to_train(train)
-    @train = train
-  end
-
   def take_volume(volume)
     @taken_volume += infact_load(volume)
   end

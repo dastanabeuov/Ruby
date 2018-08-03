@@ -91,7 +91,6 @@ class Interface
   end
 
   def stations_list
-    puts "_________"
     @stations.each { |station| puts station.name }
   end
 
@@ -107,7 +106,6 @@ class Interface
   end
 
   def trains_list
-    puts "_________"
     @trains.each { |train| puts "№ #{train.number} Тип: #{train.type}" }
   end
 
@@ -130,7 +128,6 @@ class Interface
   end
 
   def wagons_list
-    puts "_________"
     @wagons.each { |wagon| puts "№ #{wagon.number} Тип: #{wagon.type} Объем: #{wagon.total_volume}" }
   end
 
@@ -181,14 +178,13 @@ class Interface
   end
 
   def routes_list
-    puts "_________"
     @routes.each { |route| puts route.number }
   end
 
   def assign_route_train
     trains_list
     puts 'Введите номер поезда:'
-    number_train = gets.to_i
+    number_train = gets.chomp
     train = find_train(number_train)
     routes_list
     puts 'Введите номер маршрута:'
@@ -205,11 +201,11 @@ class Interface
   def add_wagon_to_train
     trains_list
     puts "Введите номер поезда"
-    number_train = gets.to_i
+    number_train = gets.chomp
     train = find_train(number_train)
     wagons_list
     puts "Введите номер вагона:"
-    number_wagon = gets.to_i
+    number_wagon = gets.chomp
     wagon = find_wagon(number_wagon)
     if wagon && train
       train.add_wagon(wagon)
@@ -219,24 +215,17 @@ class Interface
     end
   end
 
-  def train_wagons_with_numbers(train)
-    if @trains.include?(train)
-      train.wagons.each { |wagon| puts wagon }
-    end
-  end
-
   def remove_wagon_from_train
     trains_list
     puts 'Выберите номер ПОЕЗДА:'
-    train_number = gets.to_i
+    train_number = gets.chomp
     train = find_train(train_number)
-    result = train_wagons_with_numbers(train)
-    if result
-    puts "Выберите вагона"
-    wagon_number = gets.to_i
-    wagon = find_wagon(wagon_number)
-    train.remove_wagon(wagon)
-    puts SUCCESS
+    if train
+      train.wagons.each { |wagon| puts wagon.number }
+      puts "Выберите номер вагона"
+      wagon_number = gets.chomp
+      train.remove_wagon(wagon_number)
+      puts SUCCESS
     else
       puts UNKNOWN_COMAND
     end
@@ -245,15 +234,16 @@ class Interface
   def move_train
     trains_list
     puts 'Введите номер поезда:'
-    number = gets.to_i
+    number = gets.chomp
     train = find_train(number)
     puts "Выберите куда вы хотите передвинуть поезд - 1.Вперед 2.Назат"
     number = gets.to_i
-    if train && number == 1
+    if number == 1 && train
       train.go_forward
       puts SUCCESS
-    elsif train && number == 2
+    elsif number == 2 && train
       train.go_back
+      puts SUCCESS
     else
       puts UNKNOWN_COMAND
     end
@@ -278,13 +268,13 @@ class Interface
     puts "Выберите поезд"
     choose = gets.chomp
     train = find_train(choose)
-    if train.instance_of?(PassengerTrain)
+    if train && train.instance_of?(PassengerTrain)
       train.each_wagon do |pass|
-        puts "№ #{pass.number} - Свободно: #{pass.free} - Занято: #{pass.taken_number}"
+        puts "№ #{pass.number} - Свободно: #{pass.free_volume} - Занято: #{pass.taken_volume}"
       end
-    elsif train.instance_of?(CargoTrain)
+    elsif train && train.instance_of?(CargoTrain)
       train.each_wagon do |cargo|
-        puts "№ #{cargo.number} - Свободно: #{cargo.free} - Занято: #{cargo.taken_number}"
+        puts "№ #{cargo.number} - Свободно: #{cargo.free_volume} - Занято: #{cargo.taken_volume}"
       end
     else
       puts UNKNOWN_COMAND
@@ -296,15 +286,11 @@ class Interface
     puts "Выберите вагон"
     choose = gets.chomp
     wagon = find_wagon(choose)
-    if wagon.instance_of?(PassengerWagon)
-      puts 'Введите количество мест'
-      pass = gets.to_i
-      wagon.take_volume(pass)
+    if wagon && wagon.instance_of?(PassengerWagon)
+      wagon.take_volume
       puts SUCCESS
-    elsif wagon.instance_of?(CargoWagon)
-      puts 'Введите объем: '
-      cargo = gets.to_i
-      wagon.take_volume(cargo)
+    elsif wagon && wagon.instance_of?(CargoWagon)
+      wagon.take_volume
       puts SUCCESS
     else
       puts UNKNOWN_COMAND
