@@ -224,7 +224,8 @@ class Interface
       train.wagons.each { |wagon| puts wagon.number }
       puts "Выберите номер вагона"
       wagon_number = gets.chomp
-      train.remove_wagon(wagon_number)
+      wagon = find_wagon(wagon_number)
+      train.remove_wagon(wagon)
       puts SUCCESS
     else
       puts UNKNOWN_COMAND
