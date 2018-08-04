@@ -10,6 +10,7 @@ class Train
   include Exeption
   attr_reader :number, :type, :wagons, :speed
   @@trains = {}
+  NUMBER_FORMAT = /^([\w]{3}-*[\w]{2})$/
   def initialize(number, type)
     @number = number
     @type = type
@@ -25,7 +26,7 @@ class Train
   end
 
   def self.find(number)
-    @@trains[number]
+    @trains[number]
   end
 
   def add_wagon(wagon)
@@ -89,7 +90,6 @@ class Train
 
   protected
 
-  NUMBER_FORMAT = /^([\w]{3}-*[\w]{2})$/
   def validate!
     raise 'Аргумент *номер* не должен быть пустым' if number.nil?
     raise 'Неправильный формат номера' if number !~ NUMBER_FORMAT

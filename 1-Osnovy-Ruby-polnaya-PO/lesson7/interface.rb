@@ -1,15 +1,5 @@
 # frozen_string_literal: true
-=begin
-  интерфейс делать следующее:
- - Создавать станции
- - Создавать поезда
- - Создавать маршруты и управлять станциями в нем (добавлять, удалять)
- - Назначать маршрут поезду
- - Добавлять вагоны к поезду
- - Отцеплять вагоны от поезда
- - Перемещать поезд по маршруту вперед и назад
- - Просматривать список станций и список поездов на станции
-=end
+
 require_relative 'info.rb'
 require_relative 'exeption.rb'
 class Interface
@@ -259,7 +249,7 @@ class Interface
     station = find_station(name_station)
     if station
       station.each_train do |train|
-        puts "№#{train.number} - Тип: #{train.type} - Количество вагонов: #{train.wagons}"
+        puts "#{train.number} - #{train.type} <-></-> #{train.wagons}"
       end
     else
       puts 'На станций нет поездов'
@@ -272,13 +262,9 @@ class Interface
     choose = gets.chomp
     train = find_train(choose)
     if train&.instance_of?(PassengerTrain)
-      train.each_wagon do |pass|
-        puts "№ #{pass.number} - Свободно: #{pass.free_volume} - Занято: #{pass.taken_volume}"
-      end
+      train.each_wagon { |pass| puts "#{pass.number} - #{pass.free_volume} - #{pass.taken_volume}" }
     elsif train&.instance_of?(CargoTrain)
-      train.each_wagon do |cargo|
-        puts "№ #{cargo.number} - Свободно: #{cargo.free_volume} - Занято: #{cargo.taken_volume}"
-      end
+      train.each_wagon { |cargo| puts "#{cargo.number} - #{cargo.free_volume} - #{cargo.taken_volume}" }
     else
       puts UNKNOWN_COMAND
     end

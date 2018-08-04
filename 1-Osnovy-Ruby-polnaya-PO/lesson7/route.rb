@@ -43,7 +43,7 @@ class Route
   protected
 
   def validate!
-    raise 'Начальная и конечная станция не могут совпадать' if @stations[0] == @stations[-1]
-    raise 'Неизвестный тип аргумента' if @stations[0].class != Station || @stations[-1].class != Station
+    raise UNSORCE if @stations[0] == @stations[-1]
+    raise UNTYPE if @stations[0].class != Station || @stations[-1].class != Station
   end
 end

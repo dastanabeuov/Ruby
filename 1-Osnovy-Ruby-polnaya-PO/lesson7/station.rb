@@ -44,8 +44,8 @@ class Station
   protected
 
   def validate!
-    raise 'Имя не может быть пустым' if name.nil?
-    raise 'Слишком короткая информация, имя не может быть меньше чем 5 символов' if name.length < 5
-    raise 'Станция уже существует, убедитесь что Вы правильно вводите данные' if @@all_stations.map(&:name).include?(name)
+    raise CANNOTEMPTY if name.nil?
+    raise SHORTINFO if name.length < 5
+    raise DUBLEINFO if @@all_stations.map(&:name).include?(name)
   end
 end
