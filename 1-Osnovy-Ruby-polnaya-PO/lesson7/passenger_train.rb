@@ -1,4 +1,6 @@
-require_relative "train.rb"
+# frozen_string_literal: true
+
+require_relative 'train.rb'
 
 class PassengerTrain < Train
   def initialize(number)
@@ -6,8 +8,6 @@ class PassengerTrain < Train
   end
 
   def add_wagon(wagon)
-    if wagon.instance_of?(PassengerWagon)
-      super
-    end
+    super if wagon.instance_of?(PassengerWagon)
   end
 end

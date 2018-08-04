@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Exeption
   def valid?
     validate!
@@ -6,4 +8,3 @@ module Exeption
     false
   end
 end
-

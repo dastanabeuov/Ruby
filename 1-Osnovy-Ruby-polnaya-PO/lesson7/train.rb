@@ -1,6 +1,8 @@
-require_relative "company_name.rb"
-require_relative "instance_counter.rb"
-require_relative "exeption.rb"
+# frozen_string_literal: true
+
+require_relative 'company_name.rb'
+require_relative 'instance_counter.rb'
+require_relative 'exeption.rb'
 
 class Train
   include CompanyName
@@ -28,15 +30,11 @@ class Train
 
   def add_wagon(wagon)
     return unless @type == wagon.type
-    if speed.zero?
-      @wagons << wagon
-    end
+    @wagons << wagon if speed.zero?
   end
 
   def remove_wagon(wagon)
-    if wagons.include?(wagon) && speed == 0
-      @wagons.delete(wagon)
-    end
+    @wagons.delete(wagon) if wagons.include?(wagon) && speed.zero?
   end
 
   def set_route(route)
@@ -49,7 +47,7 @@ class Train
     if @route
       @route.stations[@current_index + 1]
     else
-      puts "Значение в маршруте не существует, сперва нужно задать маршут поезду"
+      puts 'Значение в маршруте не существует, сперва нужно задать маршут поезду'
     end
   end
 
@@ -61,7 +59,7 @@ class Train
     if current_station != @route.start_station
       @route.stations[@current_index - 1]
     else
-      puts "Это первая станция"
+      puts 'Это первая станция'
     end
   end
 
@@ -77,7 +75,7 @@ class Train
       prev_station.handle_train_arrival(self)
       @current_index -= 1
     else
-      puts "Не возможно движение назат, так как это первая станция"
+      puts 'Не возможно движение назат, так как это первая станция'
     end
   end
 
@@ -90,9 +88,10 @@ class Train
   end
 
   protected
+
   NUMBER_FORMAT = /^([\w]{3}-*[\w]{2})$/
   def validate!
-    raise "Аргумент *номер* не должен быть пустым" if number.nil?
-    raise "Неправильный формат номера" if number !~ NUMBER_FORMAT
+    raise 'Аргумент *номер* не должен быть пустым' if number.nil?
+    raise 'Неправильный формат номера' if number !~ NUMBER_FORMAT
   end
 end

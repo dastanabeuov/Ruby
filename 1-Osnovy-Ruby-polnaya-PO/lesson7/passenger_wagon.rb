@@ -1,4 +1,6 @@
-require_relative "wagon.rb"
+# frozen_string_literal: true
+
+require_relative 'wagon.rb'
 class PassengerWagon < Wagon
   def initialize(number, volume)
     super(number, :pass, volume)

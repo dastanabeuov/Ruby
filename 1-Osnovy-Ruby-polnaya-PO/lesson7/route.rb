@@ -1,5 +1,7 @@
-  require_relative "instance_counter.rb"
-  require_relative "exeption.rb"
+# frozen_string_literal: true
+
+require_relative 'instance_counter.rb'
+require_relative 'exeption.rb'
 class Route
   include InstanceCounter
   include Exeption
@@ -27,10 +29,10 @@ class Route
   def delete_station(station)
     immutable_stations = [start_station, stop_station]
     if immutable_stations.include?(station)
-      puts "Нелзя из базы удалять начальную и конечную станцию!"
+      puts 'Нелзя из базы удалять начальную и конечную станцию!'
     else
       @stations.delete(station)
-      puts "Станция удалена успешно!"
+      puts 'Станция удалена успешно!'
     end
   end
 
@@ -39,8 +41,9 @@ class Route
   end
 
   protected
+
   def validate!
-    raise "Начальная и конечная станция не могут совпадать" if @stations[0] == @stations[-1]
-    raise "Неизвестный тип аргумента" if @stations[0].class != Station || @stations[-1].class != Station
+    raise 'Начальная и конечная станция не могут совпадать' if @stations[0] == @stations[-1]
+    raise 'Неизвестный тип аргумента' if @stations[0].class != Station || @stations[-1].class != Station
   end
 end
